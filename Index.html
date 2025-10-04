@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Exam Elite Hub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    html, body {
+      margin:0;
+      padding:0;
+      height:100vh;
+      width:100%;
+      background:#0b7a3f; /* FULL GREEN */
+      font-family:'Segoe UI', Tahoma, sans-serif;
+      color:white;
+    }
+
+    /* Shared Styling */
+    .page {
+      height:100vh;
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+    }
+
+    h1 {
+      font-size:2.2rem;
+      margin-bottom:15px;
+    }
+    p {
+      font-size:1.05rem;
+      max-width:640px;
+      opacity:0.92;
+      margin:0 20px;
+    }
+    button {
+      background:#ffcc00;
+      color:black;
+      font-size:1rem;
+      font-weight:bold;
+      padding:12px 26px;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      transition:0.25s;
+      margin-top:20px;
+    }
+    button:hover {
+      background:white;
+      color:#0b7a3f;
+    }
+
+    /* Services Page */
+    .services {
+      display:none;
+      flex-direction:column;
+      justify-content:flex-start;
+      padding:30px 10%;
+    }
+    .services h2 {
+      font-size:2rem;
+      margin-bottom:30px;
+      text-decoration:underline;
+    }
+    .service-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+      gap:30px;
+      width:100%;
+    }
+    .service-box {
+      background:rgba(255,255,255,0.08);
+      padding:20px;
+      border-radius:10px;
+      text-align:center;
+      transition:0.3s;
+    }
+    .service-box:hover {
+      background:rgba(255,255,255,0.2);
+      transform:translateY(-6px);
+    }
+    .service-box i {
+      font-size:36px;
+      margin-bottom:12px;
+      color:#ffcc00;
+    }
+    .service-box h3 {
+      margin:0;
+      font-size:1.1rem;
+      margin-bottom:8px;
+    }
+    .service-box p {
+      font-size:0.9rem;
+      opacity:0.85;
+    }
+
+    /* JAMB CBT Form */
+    .cbt-form {
+      display:none;
+      margin-top:15px;
+      text-align:left;
+    }
+    .cbt-form label {
+      display:block;
+      font-size:0.9rem;
+      margin-top:10px;
+    }
+    .cbt-form input {
+      width:100%;
+      padding:8px;
+      margin-top:4px;
+      border:none;
+      border-radius:4px;
+    }
+    .cbt-form .actions {
+      margin-top:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .cbt-form .actions button {
+      flex:1;
+      padding:10px;
+      font-size:0.9rem;
+    }
+    .cbt-form a {
+      font-size:0.8rem;
+      color:#ffcc00;
+      text-decoration:none;
+    }
+    .cbt-form a:hover {
+      text-decoration:underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Landing Page -->
+  <div id="landing" class="page">
+    <h1>🔥 Exam Elite Hub</h1>
+    <p>Your trusted platform for WAEC, NECO, GCE, and JAMB preparation.  
+    Access resources, practice tests, and expert support to succeed with confidence.</p>
+    <button onclick="goToServices()">Get Started</button>
+  </div>
+
+  <!-- Services Page -->
+  <div id="services" class="page services">
+    <h2>Our Services</h2>
+    <div class="service-grid">
+      <div class="service-box">
+        <i class="fas fa-book"></i>
+        <h3>WAEC Runz</h3>
+        <p>Verified support and assistance for WAEC candidates.</p>
+      </div>
+      <div class="service-box">
+        <i class="fas fa-graduation-cap"></i>
+        <h3>NECO Runz</h3>
+        <p>Comprehensive coverage for NECO examination prep.</p>
+      </div>
+      <div class="service-box">
+        <i class="fas fa-university"></i>
+        <h3>GCE Runz</h3>
+        <p>Specialized help and resources for GCE candidates.</p>
+      </div>
+      <div class="service-box">
+        <i class="fas fa-file-alt"></i>
+        <h3>Past Questions</h3>
+        <p>Access past questions & answers (2000–2024).</p>
+      </div>
+      <div class="service-box" id="cbt-box">
+        <i class="fas fa-desktop"></i>
+        <h3>JAMB CBT Test</h3>
+        <p>Simulated CBT practice to sharpen your skills.</p>
+        <button onclick="toggleCBTForm()">Login / Signup</button>
+        
+        <!-- Hidden form -->
+        <div class="cbt-form" id="cbt-form">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Enter your email">
+
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password">
+
+          <a href="#">Forgot Password?</a>
+
+          <div class="actions">
+            <button>Login</button>
+            <button>Signup</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button onclick="goToLanding()">⬅ Back to Home</button>
+  </div>
+
+  <script>
+    function goToServices() {
+      document.getElementById("landing").style.display = "none";
+      document.getElementById("services").style.display = "flex";
+    }
+    function goToLanding() {
+      document.getElementById("services").style.display = "none";
+      document.getElementById("landing").style.display = "flex";
+    }
+    function toggleCBTForm() {
+      const form = document.getElementById("cbt-form");
+      if (form.style.display === "block") {
+        form.style.display = "none";
+      } else {
+        form.style.display = "block";
+      }
+    }
+  </script>
+
+</body>
+</html>
