@@ -12,44 +12,137 @@ body{
     transition: background 0.5s;
 }
 
+/* WELCOME PAGE */
 #welcome{
-    background:linear-gradient(135deg,#006400,#00a859);
-    color:white;
-    height:100vh;
-    text-align:center;
-    padding-top:100px;
+background:linear-gradient(135deg,#006400,#00a859);
+color:white;
+height:100vh;
+text-align:center;
+padding-top:100px;
 }
-
 .logo-big{ width:140px; border-radius:50%; }
 .btn{ margin-top:40px; padding:14px 35px; background:yellow; color:#006400; border:none; border-radius:30px; font-weight:bold; cursor:pointer; }
 
+/* GENERAL PAGE */
 .page{ display:none; min-height:100vh; padding-bottom:50px; transition: background 0.5s; }
 .header{ padding:15px; background:#006400; color:white; text-align:center; }
 
+/* HOME PAGE */
 .home-hero{
-    background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), url('https://i.ibb.co/XkkJJYjN/unnamed.jpg');
-    background-size:cover; background-position:center; padding:80px 20px; color:white; text-align:center;
+background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), url('https://i.ibb.co/XkkJJYjN/unnamed.jpg');
+background-size:cover; background-position:center; padding:80px 20px; color:white; text-align:center;
 }
 .home-hero h1{ font-size:36px; }
 .home-hero p{ font-size:18px; opacity:0.9; }
 
 .home-box{
-    background:white; margin:-40px auto 20px auto; width:90%; max-width:900px; padding:30px; border-radius:15px; box-shadow:0 5px 20px rgba(0,0,0,0.15); text-align:center;
+background:white; margin:-40px auto 20px auto; width:90%; max-width:900px; padding:30px; border-radius:15px; box-shadow:0 5px 20px rgba(0,0,0,0.15); text-align:center;
 }
 
 .option-btn{ padding:14px 30px; margin:10px; background:#006400; color:white; border:none; border-radius:25px; cursor:pointer; font-weight:bold; }
-
 .card{ background:white; margin:20px auto; padding:20px; border-radius:10px; box-shadow:0 3px 10px rgba(0,0,0,0.1); max-width:350px; text-align:center; }
-
 input, select{ padding:10px; width:85%; margin:8px 0; border-radius:5px; border:1px solid #ccc; }
-
 label{ font-size:14px; color:#333; }
-
 a{ color:#006400; text-decoration:none; cursor:pointer; }
+
+/* ASPIRANT DASHBOARD */
+#aspirantDashboard{
+display:none;
+background:linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('https://i.ibb.co/XkkJJYjN/unnamed.jpg');
+background-size:cover; background-position:center;
+min-height:100vh;
+color:white;
+text-align:center;
+padding-top:40px;
+}
+#aspirantDashboard .logo-big{ width:100px; margin-bottom:20px; }
+.dashboard-header{
+background:rgba(255,255,255,0.95);
+color:#006400;
+margin:0 auto 30px auto;
+padding:20px;
+border-radius:15px;
+max-width:400px;
+box-shadow:0 4px 15px rgba(0,0,0,0.2);
+}
+.dashboard-header h1{ margin:0; font-size:24px; }
+.dashboard-header p{ margin:5px 0 0 0; font-size:16px; }
+
+.asp-card{
+background:white;
+color:#006400;
+padding:20px;
+margin:15px auto;
+border-radius:15px;
+max-width:300px;
+cursor:pointer;
+font-weight:bold;
+font-size:16px;
+box-shadow:0 4px 15px rgba(0,0,0,0.2);
+transition: transform 0.2s;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+.asp-card:hover{ transform:scale(1.05); }
+.asp-card img {
+display:inline-block;
+vertical-align:middle;
+margin-right:10px;
+}
+.back-btn{ background:#006400; color:white; margin-top:30px; padding:12px 25px; border:none; border-radius:20px; cursor:pointer; font-weight:bold; }
+
+/* SCREENING PORTAL */
+#screeningPortal{
+display:none;
+min-height:100vh;
+background:linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('https://i.ibb.co/XkkJJYjN/unnamed.jpg');
+background-size:cover;
+background-position:center;
+text-align:center;
+padding-top:30px;
+color:white;
+}
+#screeningPortal .header{
+background:rgba(255,255,255,0.95);
+color:#006400;
+margin:0 auto 30px auto;
+padding:20px;
+border-radius:15px;
+max-width:400px;
+box-shadow:0 4px 15px rgba(0,0,0,0.2);
+}
+#screeningPortal .screen-card{
+background:white;
+color:#006400;
+padding:20px;
+margin:15px auto;
+border-radius:15px;
+max-width:350px;
+box-shadow:0 4px 15px rgba(0,0,0,0.2);
+text-align:left;
+}
+#screeningPortal input, #screeningPortal select{
+width:90%;
+margin:8px 0;
+padding:10px;
+border-radius:5px;
+border:1px solid #ccc;
+}
+#screeningPortal button{
+margin-top:15px;
+padding:12px 25px;
+background:#006400;
+color:white;
+border:none;
+border-radius:25px;
+cursor:pointer;
+font-weight:bold;
+}
 </style>
 </head>
 <body>
-
+<!-- WELCOME PAGE -->
 <div id="welcome">
     <img src="https://i.ibb.co/jPJ8kjmL/download.png" class="logo-big">
     <h1>UNISPHERE</h1>
@@ -57,12 +150,12 @@ a{ color:#006400; text-decoration:none; cursor:pointer; }
     <button class="btn" onclick="enterSite()">Enter</button>
 </div>
 
+<!-- HOME PAGE -->
 <div id="home" class="page">
     <div class="home-hero">
         <h1>UNISPHERE Academic Portal</h1>
         <p>Your Smart Digital Campus Experience</p>
     </div>
-
     <div class="home-box">
         <h2>Access Your Account</h2>
         <p>Secure login for Students & Aspirants</p>
@@ -71,6 +164,7 @@ a{ color:#006400; text-decoration:none; cursor:pointer; }
     </div>
 </div>
 
+<!-- LOGIN PAGE -->
 <div id="loginPage" class="page">
 <div class="header">Student Sign In</div>
 <div class="card">
@@ -84,6 +178,7 @@ a{ color:#006400; text-decoration:none; cursor:pointer; }
 <button class="option-btn" onclick="goHome()">Back</button>
 </div>
 
+<!-- SIGNUP PAGE -->
 <div id="signupPage" class="page">
 <div class="header">Create Account</div>
 <div class="card">
@@ -101,24 +196,71 @@ a{ color:#006400; text-decoration:none; cursor:pointer; }
 <button class="option-btn" onclick="goHome()">Back</button>
 </div>
 
-<div id="dashboard" class="page">
-<div class="header">Student Dashboard</div>
-<div class="card">
-<p id="welcomeUser"></p>
-<ul>
-<li>📚 Course Registration</li>
-<li>📊 Check Results</li>
-<li>💳 Pay Acceptance Fee</li>
-<li>📝 Update Profile</li>
-<li>🔑 <a onclick="changePassword()">Change Password</a></li>
-</ul>
+<!-- ASPIRANT DASHBOARD -->
+<div id="aspirantDashboard">
+    <div class="dashboard-header">
+        <h1>Welcome, <span id="aspirantName">Aspirant</span>! 🎓</h1>
+        <p>Explore your UNIOSUN Admission Tools</p>
+    </div>
+
+    <div class="asp-card" onclick="openScreening()">📝 Screening Portal</div>
+    <div class="asp-card" onclick="alert('Roadmap to UNIOSUN coming soon!')">🛣️ Roadmap to UNIOSUN</div>
+    <div class="asp-card" onclick="alert('Screening Calculator coming soon!')">📊 Screening Calculator</div>
+    <div class="asp-card" onclick="alert('Course Cut-Offs coming soon!')">🎓 Course Cut-Offs</div>
+    <div class="asp-card" onclick="window.open('https://chat.whatsapp.com/', '_blank')">💬 WhatsApp Group</div>
+
+    <div class="asp-card" onclick="window.open('https://efacility.jamb.gov.ng/', '_blank')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/37/JAMB_Logo.png" style="width:40px;">
+        📝 JAMB eFacility
+    </div>
+
+    <div class="asp-card" onclick="window.open('https://www.uniosun.edu.ng/admissions', '_blank')">
+        <img src="https://i.ibb.co/jPJ8kjmL/download.png" style="width:30px;">
+        🎓 UNIOSUN Admission Portal
+    </div>
+
+    <button class="back-btn" onclick="logout()">Back / Logout</button>
 </div>
-<button class="option-btn" onclick="goHome()">Logout</button>
+
+<!-- SCREENING PORTAL -->
+<div id="screeningPortal">
+    <div class="header">
+        <img src="https://i.ibb.co/jPJ8kjmL/download.png" class="logo-big" style="width:80px;"><br>
+        <h2>Screening Portal</h2>
+    </div>
+
+    <div class="screen-card">
+        <label>Courses 🏫</label>
+        <input type="text" placeholder="Upload courses later (placeholder)" id="courses"><br>
+
+        <label>Grades (Pick 5) 📝</label>
+        <select id="grade1"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
+        <select id="grade2"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
+        <select id="grade3"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
+        <select id="grade4"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
+        <select id="grade5"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
+
+        <label>JAMB Score 🎯</label>
+        <input type="number" id="jambScore" placeholder="Minimum 160" min="160"><br>
+
+        <label>State of Origin 🌍</label>
+        <select id="stateOrigin">
+            <option value="Osun" selected>Osun</option>
+            <option value="Lagos">Lagos</option>
+            <option value="Oyo">Oyo</option>
+            <option value="Other">Other</option>
+        </select><br>
+
+        <button onclick="calculateScore()">Calculate Score</button>
+        <h4 id="scoreResult"></h4>
+    </div>
+
+    <button class="back-btn" onclick="closeScreening()">Back</button>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, sendPasswordResetEmail, updateProfile, updatePassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, sendPasswordResetEmail, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAe9H4tFxBhu7zhFyNtgpXuKjK4BSgwF5k",
@@ -138,14 +280,15 @@ function hideAll(){
     document.getElementById("home").style.display="none";
     document.getElementById("loginPage").style.display="none";
     document.getElementById("signupPage").style.display="none";
-    document.getElementById("dashboard").style.display="none";
+    document.getElementById("aspirantDashboard").style.display="none";
+    document.getElementById("screeningPortal").style.display="none";
 }
 window.enterSite = ()=>{ document.getElementById("welcome").style.display="none"; document.getElementById("home").style.display="block"; }
 window.openLogin = ()=>{ hideAll(); document.getElementById("loginPage").style.display="block"; }
 window.openSignup = ()=>{ hideAll(); document.getElementById("signupPage").style.display="block"; }
 window.goHome = ()=>{ hideAll(); document.getElementById("home").style.display="block"; document.body.style.background="#f4f6f9"; }
 
-// SIGNUP
+// REGISTER
 window.register = ()=>{
     const username = document.getElementById("signupUsername").value.trim();
     const email = document.getElementById("signupEmail").value.trim();
@@ -166,16 +309,19 @@ window.register = ()=>{
     createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential)=>{
         const user = userCredential.user;
-        // Store username & category in displayName
         const info = JSON.stringify({ username, category });
         updateProfile(user, { displayName: info }).then(()=>{
+            localStorage.setItem(username.toLowerCase(), JSON.stringify({ email, category }));
             document.getElementById("registerResult").style.color="green";
             document.getElementById("registerResult").innerText="Registered! ✅";
             setTimeout(()=>{
                 hideAll();
-                document.getElementById("dashboard").style.display="block";
-                document.getElementById("welcomeUser").innerText=`Welcome ${username} (${category})`;
-                document.body.style.background="#000";
+                if(category==="Aspirant"){
+                    document.getElementById("aspirantName").innerText = username;
+                    document.getElementById("aspirantDashboard").style.display="block";
+                } else {
+                    alert("100L dashboard coming soon!");
+                }
             },800);
         });
     })
@@ -200,33 +346,29 @@ window.login = ()=>{
     const persistence = remember ? browserLocalPersistence : browserSessionPersistence;
     setPersistence(auth, persistence)
     .then(()=>{
-        // Try input as email
         return signInWithEmailAndPassword(auth, input, password)
-        .catch(async ()=>{
-            // If email fails, try username by searching all users (Firebase doesn't allow listing users in client, so workaround: use localStorage)
-            let saved = localStorage.getItem(input.toLowerCase());
+        .catch(()=>{
+            const saved = localStorage.getItem(input.toLowerCase());
             if(saved){
                 const info = JSON.parse(saved);
                 return signInWithEmailAndPassword(auth, info.email, password);
-            }else{
+            } else {
                 throw new Error("User not found or password incorrect");
             }
         });
     })
     .then((userCredential)=>{
         const user = userCredential.user;
-        let info = { username: input, category: "" };
-        try{ info = JSON.parse(user.displayName); }catch(e){ info.username=input; }
-        document.getElementById("loginResult").style.color="green";
-        document.getElementById("loginResult").innerText="Login Successful! ✅";
-        setTimeout(()=>{
-            hideAll();
-            document.getElementById("dashboard").style.display="block";
-            document.getElementById("welcomeUser").innerText=`Welcome ${info.username} (${info.category})`;
-            document.body.style.background="#000";
-            // Save mapping for future username login
-            localStorage.setItem(info.username.toLowerCase(), JSON.stringify({ email: user.email, category: info.category }));
-        },800);
+        let info = { username:user.email.split("@")[0], category:"" };
+        try{ if(user.displayName) info = JSON.parse(user.displayName); } catch(e){ }
+        localStorage.setItem(info.username.toLowerCase(), JSON.stringify({ email: user.email, category: info.category }));
+        hideAll();
+        if(info.category === "Aspirant"){
+            document.getElementById("aspirantName").innerText = info.username;
+            document.getElementById("aspirantDashboard").style.display="block";
+        } else {
+            alert("100L dashboard coming soon!");
+        }
     })
     .catch(error=>{
         document.getElementById("loginResult").style.color="red";
@@ -237,56 +379,109 @@ window.login = ()=>{
 // FORGOT PASSWORD
 window.forgotPassword = ()=>{
     const input = document.getElementById("loginInput").value.trim();
-    if(!input){
-        alert("Enter your username or email first!");
-        return;
-    }
-    // Try as email
+    if(!input){ alert("Enter username or email!"); return; }
+
+   
     sendPasswordResetEmail(auth, input)
-    .then(()=>{ alert(`Password reset link sent to ${input}`); })
-    .catch(()=>{
-        // Try as username from localStorage
+    .then(() => {
+        alert(`Password reset link sent to ${input}`);
+    })
+    .catch(() => {
         const saved = localStorage.getItem(input.toLowerCase());
-        if(saved){
+        if (saved) {
             const info = JSON.parse(saved);
-            sendPasswordResetEmail(auth, info.email).then(()=>{ alert(`Password reset link sent to ${info.email}`); })
-            .catch(error=>{ alert("Error: "+error.message); });
-        }else{
+            sendPasswordResetEmail(auth, info.email)
+            .then(() => { 
+                alert(`Password reset link sent to ${info.email}`); 
+            })
+            .catch(error => { 
+                alert("Error: " + error.message); 
+            });
+        } else {
             alert("User not found!");
         }
     });
 }
 
-// CHANGE PASSWORD
-window.changePassword = ()=>{
-    const user = auth.currentUser;
-    if(!user){
-        alert("You need to be logged in to change password!");
-        return;
-    }
-    const newPass = prompt("Enter your new password (min 6 chars):");
-    if(!newPass || newPass.length < 6){
-        alert("Password must be at least 6 characters!");
-        return;
-    }
-    updatePassword(user, newPass)
-    .then(()=>{ alert("Password successfully changed!"); })
-    .catch((error)=>{ alert("Error: "+error.message); });
+// LOGOUT
+window.logout = () => {
+    signOut(auth).then(() => {
+        hideAll();
+        goHome();
+    });
 }
 
 // AUTO LOGIN
 onAuthStateChanged(auth, (user) => {
-  if(user){
-    hideAll();
-    document.getElementById("dashboard").style.display = "block";
-    let info = { username:user.email.split("@")[0], category:"" };
-    try{ info = JSON.parse(user.displayName); }catch(e){}
-    document.getElementById("welcomeUser").innerText = `Welcome ${info.username} (${info.category})`;
-    document.body.style.background = "#000";
-    // Save mapping for username login
-    localStorage.setItem(info.username.toLowerCase(), JSON.stringify({ email: user.email, category: info.category }));
-  }
+    if(user){
+        let info = { username: user.email.split("@")[0], category: "" };
+        try { if(user.displayName) info = JSON.parse(user.displayName); } catch(e) {}
+        localStorage.setItem(info.username.toLowerCase(), JSON.stringify({ email: user.email, category: info.category }));
+        hideAll();
+        if(info.category === "Aspirant"){
+            document.getElementById("aspirantName").innerText = info.username;
+            document.getElementById("aspirantDashboard").style.display = "block";
+        } else {
+            alert("100L dashboard coming soon!");
+        }
+    }
 });
-</script>
+
+// SCREENING PORTAL NAVIGATION
+window.openScreening = () => {
+    hideAll();
+    document.getElementById("screeningPortal").style.display = "block";
+}
+
+window.closeScreening = () => {
+    hideAll();
+    document.getElementById("aspirantDashboard").style.display = "block";
+}
+
+// CALCULATE SCREENING SCORE
+window.calculateScore = () => {
+    const courses = document.getElementById("courses").value.trim();
+    const grades = [
+        document.getElementById("grade1").value,
+        document.getElementById("grade2").value,
+        document.getElementById("grade3").value,
+        document.getElementById("grade4").value,
+        document.getElementById("grade5").value
+    ];
+    const jamb = parseInt(document.getElementById("jambScore").value);
+    const state = document.getElementById("stateOrigin").value;
+
+    if(!courses || grades.includes("") || !jamb || !state){
+        document.getElementById("scoreResult").style.color="red";
+        document.getElementById("scoreResult").innerText="Fill all fields!";
+        return;
+    }
+
+    if(jamb < 160){
+        document.getElementById("scoreResult").style.color="red";
+        document.getElementById("scoreResult").innerText="JAMB score must be at least 160!";
+        return;
+    }
+
+    // GRADE points (A1=6 ... C6=1)
+    const gradePoints = { A1:6, B2:5, B3:4, C4:3, C5:2, C6:1 };
+    let totalGradePoints = grades.reduce((sum, g) => sum + (gradePoints[g]||0), 0);
+
+    // Scale 5-grade total to 40 points
+    const gradeScore = (totalGradePoints / 30) * 40; // 6*5=30 max
+
+    // JAMB points, scaled to 60
+    let jambScore = ((jamb - 160) / (400 - 160)) * 60;
+    if(jambScore > 60) jambScore = 60;
+
+    // State bonus
+    let stateBonus = (state === "Osun") ? 5 : 0;
+
+    const totalScore = gradeScore + jambScore + stateBonus;
+
+    document.getElementById("scoreResult").style.color="green";
+    document.getElementById("scoreResult").innerText=`Calculated Score: ${totalScore.toFixed(2)} / 105`;
+}
+</="script">
 </body>
 </html>
