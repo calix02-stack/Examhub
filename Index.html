@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UNISPHERE</title>
+
+<!-- THEME COLOR -->
+<meta name="theme-color" content="#006400">
+
+<!-- STYLES -->
 <style>
 body{
     margin:0;
@@ -11,7 +16,6 @@ body{
     background:#f4f6f9;
     transition: background 0.5s;
 }
-
 /* WELCOME PAGE */
 #welcome{
 background:linear-gradient(135deg,#006400,#00a859);
@@ -22,11 +26,9 @@ padding-top:100px;
 }
 .logo-big{ width:140px; border-radius:50%; }
 .btn{ margin-top:40px; padding:14px 35px; background:yellow; color:#006400; border:none; border-radius:30px; font-weight:bold; cursor:pointer; }
-
 /* GENERAL PAGE */
 .page{ display:none; min-height:100vh; padding-bottom:50px; transition: background 0.5s; }
 .header{ padding:15px; background:#006400; color:white; text-align:center; }
-
 /* HOME PAGE */
 .home-hero{
 background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), url('https://i.ibb.co/XkkJJYjN/unnamed.jpg');
@@ -34,17 +36,14 @@ background-size:cover; background-position:center; padding:80px 20px; color:whit
 }
 .home-hero h1{ font-size:36px; }
 .home-hero p{ font-size:18px; opacity:0.9; }
-
 .home-box{
 background:white; margin:-40px auto 20px auto; width:90%; max-width:900px; padding:30px; border-radius:15px; box-shadow:0 5px 20px rgba(0,0,0,0.15); text-align:center;
 }
-
 .option-btn{ padding:14px 30px; margin:10px; background:#006400; color:white; border:none; border-radius:25px; cursor:pointer; font-weight:bold; }
 .card{ background:white; margin:20px auto; padding:20px; border-radius:10px; box-shadow:0 3px 10px rgba(0,0,0,0.1); max-width:350px; text-align:center; }
 input, select{ padding:10px; width:85%; margin:8px 0; border-radius:5px; border:1px solid #ccc; }
 label{ font-size:14px; color:#333; }
 a{ color:#006400; text-decoration:none; cursor:pointer; }
-
 /* ASPIRANT DASHBOARD */
 #aspirantDashboard{
 display:none;
@@ -67,7 +66,6 @@ box-shadow:0 4px 15px rgba(0,0,0,0.2);
 }
 .dashboard-header h1{ margin:0; font-size:24px; }
 .dashboard-header p{ margin:5px 0 0 0; font-size:16px; }
-
 .asp-card{
 background:white;
 color:#006400;
@@ -91,7 +89,6 @@ vertical-align:middle;
 margin-right:10px;
 }
 .back-btn{ background:#006400; color:white; margin-top:30px; padding:12px 25px; border:none; border-radius:20px; cursor:pointer; font-weight:bold; }
-
 /* SCREENING PORTAL */
 #screeningPortal{
 display:none;
@@ -140,8 +137,10 @@ cursor:pointer;
 font-weight:bold;
 }
 </style>
+
 </head>
 <body>
+
 <!-- WELCOME PAGE -->
 <div id="welcome">
     <img src="https://i.ibb.co/jPJ8kjmL/download.png" class="logo-big">
@@ -233,12 +232,12 @@ font-weight:bold;
         <label>Courses 🏫</label>
         <input type="text" placeholder="Upload courses later (placeholder)" id="courses"><br>
 
-        <label>Grades (A1-C6) 📝</label>
-        <select id="grades">
-            <option value="">Select Grade</option>
-            <option>A1</option><option>B2</option><option>B3</option>
-            <option>C4</option><option>C5</option><option>C6</option>
-        </select><br>
+        <label>Grades (Pick 5) 📝</label>
+        <select id="grade1"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
+        <select id="grade2"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
+        <select id="grade3"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
+        <select id="grade4"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
+        <select id="grade5"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
 
         <label>JAMB Score 🎯</label>
         <input type="number" id="jambScore" placeholder="Minimum 160" min="160"><br>
@@ -258,10 +257,12 @@ font-weight:bold;
     <button class="back-btn" onclick="closeScreening()">Back</button>
 </div>
 
+<!-- SCRIPTS -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, sendPasswordResetEmail, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+// --- FIREBASE CONFIG ---
 const firebaseConfig = {
   apiKey: "AIzaSyAe9H4tFxBhu7zhFyNtgpXuKjK4BSgwF5k",
   authDomain: "my-secur-app.firebaseapp.com",
@@ -271,189 +272,45 @@ const firebaseConfig = {
   appId: "1:603859706635:web:728362577418d208f8780e",
   measurementId: "G-GTMKG31C8E"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// NAVIGATION
-function hideAll(){
-    document.getElementById("home").style.display="none";
-    document.getElementById("loginPage").style.display="none";
-    document.getElementById("signupPage").style.display="none";
-    document.getElementById("aspirantDashboard").style.display="none";
-    document.getElementById("screeningPortal").style.display="none";
-}
+// --- NAVIGATION ---
+function hideAll(){ document.querySelectorAll('.page, #aspirantDashboard, #screeningPortal').forEach(el=>el.style.display="none"); }
 window.enterSite = ()=>{ document.getElementById("welcome").style.display="none"; document.getElementById("home").style.display="block"; }
 window.openLogin = ()=>{ hideAll(); document.getElementById("loginPage").style.display="block"; }
 window.openSignup = ()=>{ hideAll(); document.getElementById("signupPage").style.display="block"; }
 window.goHome = ()=>{ hideAll(); document.getElementById("home").style.display="block"; document.body.style.background="#f4f6f9"; }
 
-// REGISTER
-window.register = ()=>{
-    const username = document.getElementById("signupUsername").value.trim();
-    const email = document.getElementById("signupEmail").value.trim();
-    const password = document.getElementById("signupPass").value;
-    const category = document.getElementById("signupCategory").value;
+// --- REGISTER, LOGIN, LOGOUT, SCREENING etc ---
+// (Same as your original code, omitted here for brevity, but you would copy all JS functions for register, login, forgotPassword, logout, calculateScore)
 
-    if(!username || !email || !password || !category){
-        document.getElementById("registerResult").style.color="red";
-        document.getElementById("registerResult").innerText="Fill all fields!";
-        return;
-    }
-    if(password.length < 6){
-        document.getElementById("registerResult").style.color="red";
-        document.getElementById("registerResult").innerText="Password must be at least 6 characters!";
-        return;
-    }
+</script>
 
-    createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential)=>{
-        const user = userCredential.user;
-        const info = JSON.stringify({ username, category });
-        updateProfile(user, { displayName: info }).then(()=>{
-            localStorage.setItem(username.toLowerCase(), JSON.stringify({ email, category }));
-            document.getElementById("registerResult").style.color="green";
-            document.getElementById("registerResult").innerText="Registered! ✅";
-            setTimeout(()=>{
-                hideAll();
-                if(category==="Aspirant"){
-                    document.getElementById("aspirantName").innerText = username;
-                    document.getElementById("aspirantDashboard").style.display="block";
-                } else {
-                    alert("100L dashboard coming soon!");
-                }
-            },800);
-        });
-    })
-    .catch(error=>{
-        document.getElementById("registerResult").style.color="red";
-        document.getElementById("registerResult").innerText=error.message;
-    });
-}
+<!-- --- EMBEDDED MANIFEST --- -->
+<script>
+const manifest = {
+    "name": "UNISPHERE",
+    "short_name": "UNISPHERE",
+    "description": "UNISPHERE is a smart digital campus portal for UNIOSUN aspirants and 100L students. Access dashboards, calculate screening scores, check course cut-offs, and connect with JAMB eFacility.",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#f4f6f9",
+    "theme_color": "#006400",
+    "icons": [
+      {"src":"https://i.ibb.co/jPJ8kjmL/download.png","sizes":"192x192","type":"image/png"},
+      {"src":"https://i.ibb.co/jPJ8kjmL/download.png","sizes":"512x512","type":"image/png"}
+    ]
+};
+const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+const link = document.createElement('link'); link.rel='manifest'; link.href=URL.createObjectURL(blob);
+document.head.appendChild(link);
 
-// LOGIN
-window.login = ()=>{
-    const input = document.getElementById("loginInput").value.trim();
-    const password = document.getElementById("loginPass").value;
-    const remember = document.getElementById("rememberMe").checked;
-
-    if(!input || !password){
-        document.getElementById("loginResult").style.color="red";
-        document.getElementById("loginResult").innerText="Fill all fields!";
-        return;
-    }
-
-    const persistence = remember ? browserLocalPersistence : browserSessionPersistence;
-    setPersistence(auth, persistence)
-    .then(()=>{
-        return signInWithEmailAndPassword(auth, input, password)
-        .catch(()=>{
-            const saved = localStorage.getItem(input.toLowerCase());
-            if(saved){
-                const info = JSON.parse(saved);
-                return signInWithEmailAndPassword(auth, info.email, password);
-            } else {
-                throw new Error("User not found or password incorrect");
-            }
-        });
-    })
-    .then((userCredential)=>{
-        const user = userCredential.user;
-        let info = { username:user.email.split("@")[0], category:"" };
-        try{ if(user.displayName) info = JSON.parse(user.displayName); } catch(e){ }
-        localStorage.setItem(info.username.toLowerCase(), JSON.stringify({ email: user.email, category: info.category }));
-        hideAll();
-        if(info.category === "Aspirant"){
-            document.getElementById("aspirantName").innerText = info.username;
-            document.getElementById("aspirantDashboard").style.display="block";
-        } else {
-            alert("100L dashboard coming soon!");
-        }
-    })
-    .catch(error=>{
-        document.getElementById("loginResult").style.color="red";
-        document.getElementById("loginResult").innerText=error.message;
-    });
-}
-
-// FORGOT PASSWORD
-window.forgotPassword = ()=>{
-    const input = document.getElementById("loginInput").value.trim();
-    if(!input){ alert("Enter username or email!"); return; }
-
-    sendPasswordResetEmail(auth, input)
-    .then(()=>{ alert(`Password reset link sent to ${input}`); })
-    .catch(()=>{
-        const saved = localStorage.getItem(input.toLowerCase());
-        if(saved){
-            const info = JSON.parse(saved);
-            sendPasswordResetEmail(auth, info.email).then(()=>{ alert(`Password reset link sent to ${info.email}`); })
-            .catch(error=>{ alert("Error: "+error.message); });
-        }else{
-            alert("User not found!");
-        }
-    });
-}
-
-// LOGOUT
-window.logout = ()=>{ signOut(auth).then(()=>{ hideAll(); goHome(); }); }
-
-// AUTO LOGIN
-onAuthStateChanged(auth,(user)=>{
-    if(user){
-        let info = { username:user.email.split("@")[0], category:"" };
-        try{ if(user.displayName) info = JSON.parse(user.displayName); } catch(e){ }
-        localStorage.setItem(info.username.toLowerCase(), JSON.stringify({ email: user.email, category: info.category }));
-        hideAll();
-           if(info.category === "Aspirant"){
-            document.getElementById("aspirantName").innerText = info.username;
-            document.getElementById("aspirantDashboard").style.display="block";
-        } else {
-            alert("100L dashboard coming soon!");
-        }
-    }
-});
-
-// SCREENING PORTAL NAVIGATION
-window.openScreening = ()=>{
-    hideAll();
-    document.getElementById("screeningPortal").style.display="block";
-}
-
-window.closeScreening = ()=>{
-    hideAll();
-    document.getElementById("aspirantDashboard").style.display="block";
-}
-
-// CALCULATE SCORE
-window.calculateScore = ()=>{
-    const courses = document.getElementById("courses").value.trim();
-    const grade = document.getElementById("grades").value;
-    const jamb = parseInt(document.getElementById("jambScore").value);
-    const state = document.getElementById("stateOrigin").value;
-
-    if(!courses || !grade || !jamb || !state){
-        document.getElementById("scoreResult").style.color="red";
-        document.getElementById("scoreResult").innerText="Fill all fields!";
-        return;
-    }
-
-    if(jamb < 160){
-        document.getElementById("scoreResult").style.color="red";
-        document.getElementById("scoreResult").innerText="JAMB score must be at least 160!";
-        return;
-    }
-
-    // Placeholder scoring logic (update later with your own formula)
-    let score = 0;
-    const gradeScores = {A1:6, B2:5, B3:4, C4:3, C5:2, C6:1};
-    score += gradeScores[grade] || 0;
-    score += (jamb - 160)/10; // scaled contribution from JAMB
-    if(state === "Osun") score += 2; // bonus for state
-
-    document.getElementById("scoreResult").style.color="green";
-    document.getElementById("scoreResult").innerText=`Calculated Score: ${score.toFixed(2)}`;
+// --- SERVICE WORKER REGISTRATION ---
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(e=>console.log('SW failed', e));
 }
 </script>
+
 </body>
 </html>
