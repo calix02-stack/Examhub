@@ -1,220 +1,229 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Exam Elite Hub</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    html, body {
-      margin:0;
-      padding:0;
-      height:100vh;
-      width:100%;
-      background:#0b7a3f; /* FULL GREEN */
-      font-family:'Segoe UI', Tahoma, sans-serif;
-      color:white;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNISPHERE</title>
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI', sans-serif;
+    background:#f4f6f9;
+    transition: background 0.5s;
+}
 
-    /* Shared Styling */
-    .page {
-      height:100vh;
-      width:100%;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-    }
+#welcome{
+    background:linear-gradient(135deg,#006400,#00a859);
+    color:white;
+    height:100vh;
+    text-align:center;
+    padding-top:100px;
+}
 
-    h1 {
-      font-size:2.2rem;
-      margin-bottom:15px;
-    }
-    p {
-      font-size:1.05rem;
-      max-width:640px;
-      opacity:0.92;
-      margin:0 20px;
-    }
-    button {
-      background:#ffcc00;
-      color:black;
-      font-size:1rem;
-      font-weight:bold;
-      padding:12px 26px;
-      border:none;
-      border-radius:6px;
-      cursor:pointer;
-      transition:0.25s;
-      margin-top:20px;
-    }
-    button:hover {
-      background:white;
-      color:#0b7a3f;
-    }
+.logo-big{ width:140px; border-radius:50%; }
+.btn{ margin-top:40px; padding:14px 35px; background:yellow; color:#006400; border:none; border-radius:30px; font-weight:bold; cursor:pointer; }
 
-    /* Services Page */
-    .services {
-      display:none;
-      flex-direction:column;
-      justify-content:flex-start;
-      padding:30px 10%;
-    }
-    .services h2 {
-      font-size:2rem;
-      margin-bottom:30px;
-      text-decoration:underline;
-    }
-    .service-grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
-      gap:30px;
-      width:100%;
-    }
-    .service-box {
-      background:rgba(255,255,255,0.08);
-      padding:20px;
-      border-radius:10px;
-      text-align:center;
-      transition:0.3s;
-    }
-    .service-box:hover {
-      background:rgba(255,255,255,0.2);
-      transform:translateY(-6px);
-    }
-    .service-box i {
-      font-size:36px;
-      margin-bottom:12px;
-      color:#ffcc00;
-    }
-    .service-box h3 {
-      margin:0;
-      font-size:1.1rem;
-      margin-bottom:8px;
-    }
-    .service-box p {
-      font-size:0.9rem;
-      opacity:0.85;
-    }
+.page{ display:none; min-height:100vh; padding-bottom:50px; transition: background 0.5s; }
+.header{ padding:15px; background:#006400; color:white; text-align:center; }
 
-    /* JAMB CBT Form */
-    .cbt-form {
-      display:none;
-      margin-top:15px;
-      text-align:left;
-    }
-    .cbt-form label {
-      display:block;
-      font-size:0.9rem;
-      margin-top:10px;
-    }
-    .cbt-form input {
-      width:100%;
-      padding:8px;
-      margin-top:4px;
-      border:none;
-      border-radius:4px;
-    }
-    .cbt-form .actions {
-      margin-top:12px;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .cbt-form .actions button {
-      flex:1;
-      padding:10px;
-      font-size:0.9rem;
-    }
-    .cbt-form a {
-      font-size:0.8rem;
-      color:#ffcc00;
-      text-decoration:none;
-    }
-    .cbt-form a:hover {
-      text-decoration:underline;
-    }
-  </style>
+.home-hero{
+    background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), url('https://i.ibb.co/XkkJJYjN/unnamed.jpg');
+    background-size:cover; background-position:center; padding:80px 20px; color:white; text-align:center;
+}
+.home-hero h1{ font-size:36px; }
+.home-hero p{ font-size:18px; opacity:0.9; }
+
+.home-box{
+    background:white; margin:-40px auto 20px auto; width:90%; max-width:900px; padding:30px; border-radius:15px; box-shadow:0 5px 20px rgba(0,0,0,0.15); text-align:center;
+}
+
+.option-btn{ padding:14px 30px; margin:10px; background:#006400; color:white; border:none; border-radius:25px; cursor:pointer; font-weight:bold; }
+
+.card{ background:white; margin:20px auto; padding:20px; border-radius:10px; box-shadow:0 3px 10px rgba(0,0,0,0.1); max-width:350px; text-align:center; }
+
+input, select{ padding:10px; width:85%; margin:8px 0; border-radius:5px; border:1px solid #ccc; }
+
+label{ font-size:14px; color:#333; }
+</style>
 </head>
 <body>
 
-  <!-- Landing Page -->
-  <div id="landing" class="page">
-    <h1>🔥 Exam Elite Hub</h1>
-    <p>Your trusted platform for WAEC, NECO, GCE, and JAMB preparation.  
-    Access resources, practice tests, and expert support to succeed with confidence.</p>
-    <button onclick="goToServices()">Get Started</button>
-  </div>
+<div id="welcome">
+    <img src="https://i.ibb.co/jPJ8kjmL/download.png" class="logo-big">
+    <h1>UNISPHERE</h1>
+    <p>Empowering Aspirants & 100L Students</p>
+    <button class="btn" onclick="enterSite()">Enter</button>
+</div>
 
-  <!-- Services Page -->
-  <div id="services" class="page services">
-    <h2>Our Services</h2>
-    <div class="service-grid">
-      <div class="service-box">
-        <i class="fas fa-book"></i>
-        <h3>WAEC Runz</h3>
-        <p>Verified support and assistance for WAEC candidates.</p>
-      </div>
-      <div class="service-box">
-        <i class="fas fa-graduation-cap"></i>
-        <h3>NECO Runz</h3>
-        <p>Comprehensive coverage for NECO examination prep.</p>
-      </div>
-      <div class="service-box">
-        <i class="fas fa-university"></i>
-        <h3>GCE Runz</h3>
-        <p>Specialized help and resources for GCE candidates.</p>
-      </div>
-      <div class="service-box">
-        <i class="fas fa-file-alt"></i>
-        <h3>Past Questions</h3>
-        <p>Access past questions & answers (2000–2024).</p>
-      </div>
-      <div class="service-box" id="cbt-box">
-        <i class="fas fa-desktop"></i>
-        <h3>JAMB CBT Test</h3>
-        <p>Simulated CBT practice to sharpen your skills.</p>
-        <button onclick="toggleCBTForm()">Login / Signup</button>
-        
-        <!-- Hidden form -->
-        <div class="cbt-form" id="cbt-form">
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="Enter your email">
-
-          <label for="password">Password</label>
-          <input type="password" id="password" placeholder="Enter your password">
-
-          <a href="#">Forgot Password?</a>
-
-          <div class="actions">
-            <button>Login</button>
-            <button>Signup</button>
-          </div>
-        </div>
-      </div>
+<div id="home" class="page">
+    <div class="home-hero">
+        <h1>UNISPHERE Academic Portal</h1>
+        <p>Your Smart Digital Campus Experience</p>
     </div>
-    <button onclick="goToLanding()">⬅ Back to Home</button>
-  </div>
 
-  <script>
-    function goToServices() {
-      document.getElementById("landing").style.display = "none";
-      document.getElementById("services").style.display = "flex";
-    }
-    function goToLanding() {
-      document.getElementById("services").style.display = "none";
-      document.getElementById("landing").style.display = "flex";
-    }
-    function toggleCBTForm() {
-      const form = document.getElementById("cbt-form");
-      if (form.style.display === "block") {
-        form.style.display = "none";
-      } else {
-        form.style.display = "block";
-      }
-    }
-  </script>
+    <div class="home-box">
+        <h2>Access Your Account</h2>
+        <p>Secure login for Students & Aspirants</p>
+        <button class="option-btn" onclick="openLogin()">Sign In</button>
+        <button class="option-btn" onclick="openSignup()">Sign Up</button>
+    </div>
+</div>
 
+<div id="loginPage" class="page">
+<div class="header">Student Sign In</div>
+<div class="card">
+  <input type="text" id="loginUsername" placeholder="Username"><br>
+  <input type="password" id="loginPass" placeholder="Password"><br>
+  <label><input type="checkbox" id="rememberMe"> Remember Me</label><br>
+  <button class="option-btn" onclick="login()">Login</button>
+  <h4 id="loginResult"></h4>
+</div>
+<button class="option-btn" onclick="goHome()">Back</button>
+</div>
+
+<div id="signupPage" class="page">
+<div class="header">Create Account</div>
+<div class="card">
+  <input type="text" id="signupUsername" placeholder="Username"><br>
+  <input type="password" id="signupPass" placeholder="Password"><br>
+  <select id="signupCategory">
+    <option value="">Select Category</option>
+    <option value="100L">100 Level Student</option>
+    <option value="Aspirant">Aspirant</option>
+  </select><br>
+  <button class="option-btn" onclick="register()">Register</button>
+  <h4 id="registerResult"></h4>
+</div>
+<button class="option-btn" onclick="goHome()">Back</button>
+</div>
+
+<div id="dashboard" class="page">
+<div class="header">Student Dashboard</div>
+<div class="card">
+<p id="welcomeUser"></p>
+<ul>
+<li>📚 Course Registration</li>
+<li>📊 Check Results</li>
+<li>💳 Pay Acceptance Fee</li>
+<li>📝 Update Profile</li>
+</ul>
+</div>
+<button class="option-btn" onclick="goHome()">Logout</button>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence } 
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAe9H4tFxBhu7zhFyNtgpXuKjK4BSgwF5k",
+  authDomain: "my-secur-app.firebaseapp.com",
+  projectId: "my-secur-app",
+  storageBucket: "my-secur-app.firebasestorage.app",
+  messagingSenderId: "603859706635",
+  appId: "1:603859706635:web:728362577418d208f8780e",
+  measurementId: "G-GTMKG31C8E"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const usernameMap = {}; // username -> { email, category }
+
+// NAVIGATION
+function hideAll(){
+    document.getElementById("home").style.display="none";
+    document.getElementById("loginPage").style.display="none";
+    document.getElementById("signupPage").style.display="none";
+    document.getElementById("dashboard").style.display="none";
+}
+window.enterSite = ()=>{ document.getElementById("welcome").style.display="none"; document.getElementById("home").style.display="block"; }
+window.openLogin = ()=>{ hideAll(); document.getElementById("loginPage").style.display="block"; }
+window.openSignup = ()=>{ hideAll(); document.getElementById("signupPage").style.display="block"; }
+window.goHome = ()=>{ hideAll(); document.getElementById("home").style.display="block"; document.body.style.background="#f4f6f9"; }
+
+// SIGNUP
+window.register = ()=>{
+    const username = document.getElementById("signupUsername").value.trim();
+    const password = document.getElementById("signupPass").value;
+    const category = document.getElementById("signupCategory").value;
+
+    if(!username || !password || !category){
+        document.getElementById("registerResult").style.color="red";
+        document.getElementById("registerResult").innerText="Fill all fields!";
+        return;
+    }
+    if(password.length < 6){
+        document.getElementById("registerResult").style.color="red";
+        document.getElementById("registerResult").innerText="Password must be at least 6 characters!";
+        return;
+    }
+
+    const dummyEmail = username + "@unisphere.com";
+    usernameMap[username.toLowerCase()] = { email: dummyEmail, category };
+
+    createUserWithEmailAndPassword(auth, dummyEmail, password)
+    .then(()=>{
+        document.getElementById("registerResult").style.color="green";
+        document.getElementById("registerResult").innerText="Registered! ✅";
+        setTimeout(()=>{
+            hideAll();
+            document.getElementById("dashboard").style.display="block";
+            document.getElementById("welcomeUser").innerText=`Welcome ${username} (${category})`;
+            document.body.style.background="#000";
+        },800);
+    })
+    .catch(error=>{
+        document.getElementById("registerResult").style.color="red";
+        document.getElementById("registerResult").innerText=error.message;
+    });
+}
+
+// LOGIN
+window.login = ()=>{
+    const username = document.getElementById("loginUsername").value.trim();
+    const password = document.getElementById("loginPass").value;
+    const remember = document.getElementById("rememberMe").checked;
+
+    if(!username || !password){
+        document.getElementById("loginResult").style.color="red";
+        document.getElementById("loginResult").innerText="Fill all fields!";
+        return;
+    }
+
+    const userInfo = usernameMap[username.toLowerCase()] || { email: username + "@unisphere.com", category: "" };
+    const persistence = remember ? browserLocalPersistence : browserSessionPersistence;
+
+    setPersistence(auth, persistence)
+    .then(() => signInWithEmailAndPassword(auth, userInfo.email, password))
+    .then(()=>{
+        document.getElementById("loginResult").style.color="green";
+        document.getElementById("loginResult").innerText="Login Successful! ✅";
+        setTimeout(()=>{
+            hideAll();
+            document.getElementById("dashboard").style.display="block";
+            document.getElementById("welcomeUser").innerText=`Welcome ${username} (${userInfo.category})`;
+            document.body.style.background="#000";
+        },800);
+    })
+    .catch(error=>{
+        document.getElementById("loginResult").style.color="red";
+        document.getElementById("loginResult").innerText=error.message;
+    });
+}
+
+// AUTO LOGIN
+onAuthStateChanged(auth, (user) => {
+  if(user){
+    hideAll();
+    document.getElementById("dashboard").style.display = "block";
+    let email = user.email || "";
+    let username = email.split("@")[0];
+    let category = usernameMap[username.toLowerCase()]?.category || "";
+    document.getElementById("welcomeUser").innerText = `Welcome ${username} (${category})`;
+    document.body.style.background = "#000";
+  }
+});
+</script>
 </body>
 </html>
