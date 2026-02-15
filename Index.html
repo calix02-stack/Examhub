@@ -118,7 +118,7 @@ a{ color:#006400; text-decoration:none; cursor:pointer; }
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, sendPasswordResetEmail, updatePassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, sendPasswordResetEmail, updateProfile, updatePassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAe9H4tFxBhu7zhFyNtgpXuKjK4BSgwF5k",
@@ -132,7 +132,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const usernameMap = {}; // username -> { email, category }
 
 // NAVIGATION
 function hideAll(){
@@ -164,18 +163,21 @@ window.register = ()=>{
         return;
     }
 
-    usernameMap[username.toLowerCase()] = { email, category };
-
     createUserWithEmailAndPassword(auth, email, password)
-    .then(()=>{
-        document.getElementById("registerResult").style.color="green";
-        document.getElementById("registerResult").innerText="Registered! ✅";
-        setTimeout(()=>{
-            hideAll();
-            document.getElementById("dashboard").style.display="block";
-            document.getElementById("welcomeUser").innerText=`Welcome ${username} (${category})`;
-            document.body.style.background="#000";
-        },800);
+    .then((userCredential)=>{
+        const user = userCredential.user;
+        // Store username & category in displayName
+        const info = JSON.stringify({ username, category });
+        updateProfile(user, { displayName: info }).then(()=>{
+            document.getElementById("registerResult").style.color="green";
+            document.getElementById("registerResult").innerText="Registered! ✅";
+            setTimeout(()=>{
+                hideAll();
+                document.getElementById("dashboard").style.display="block";
+                document.getElementById("welcomeUser").innerText=`Welcome ${username} (${category})`;
+                document.body.style.background="#000";
+            },800);
+        });
     })
     .catch(error=>{
         document.getElementById("registerResult").style.color="red";
@@ -195,31 +197,35 @@ window.login = ()=>{
         return;
     }
 
-    // Use email if input is email, otherwise username
-    let userInfo = usernameMap[input.toLowerCase()];
-    if(!userInfo){
-        // Try if input is an email registered
-        userInfo = Object.values(usernameMap).find(u=>u.email.toLowerCase()===input.toLowerCase());
-    }
-    if(!userInfo){
-        document.getElementById("loginResult").style.color="red";
-        document.getElementById("loginResult").innerText="User not found!";
-        return;
-    }
-
     const persistence = remember ? browserLocalPersistence : browserSessionPersistence;
-
     setPersistence(auth, persistence)
-    .then(() => signInWithEmailAndPassword(auth, userInfo.email, password))
     .then(()=>{
+        // Try input as email
+        return signInWithEmailAndPassword(auth, input, password)
+        .catch(async ()=>{
+            // If email fails, try username by searching all users (Firebase doesn't allow listing users in client, so workaround: use localStorage)
+            let saved = localStorage.getItem(input.toLowerCase());
+            if(saved){
+                const info = JSON.parse(saved);
+                return signInWithEmailAndPassword(auth, info.email, password);
+            }else{
+                throw new Error("User not found or password incorrect");
+            }
+        });
+    })
+    .then((userCredential)=>{
+        const user = userCredential.user;
+        let info = { username: input, category: "" };
+        try{ info = JSON.parse(user.displayName); }catch(e){ info.username=input; }
         document.getElementById("loginResult").style.color="green";
         document.getElementById("loginResult").innerText="Login Successful! ✅";
         setTimeout(()=>{
             hideAll();
-            let username = Object.keys(usernameMap).find(k=>usernameMap[k].email === userInfo.email);
             document.getElementById("dashboard").style.display="block";
-            document.getElementById("welcomeUser").innerText=`Welcome ${username} (${userInfo.category})`;
+            document.getElementById("welcomeUser").innerText=`Welcome ${info.username} (${info.category})`;
             document.body.style.background="#000";
+            // Save mapping for future username login
+            localStorage.setItem(info.username.toLowerCase(), JSON.stringify({ email: user.email, category: info.category }));
         },800);
     })
     .catch(error=>{
@@ -235,20 +241,19 @@ window.forgotPassword = ()=>{
         alert("Enter your username or email first!");
         return;
     }
-    let userInfo = usernameMap[input.toLowerCase()];
-    if(!userInfo){
-        userInfo = Object.values(usernameMap).find(u=>u.email.toLowerCase()===input.toLowerCase());
-    }
-    if(!userInfo){
-        alert("User not found!");
-        return;
-    }
-    sendPasswordResetEmail(auth, userInfo.email)
-    .then(()=>{
-        alert(`Password reset link sent to ${userInfo.email}`);
-    })
-    .catch((error)=>{
-        alert("Error: " + error.message);
+    // Try as email
+    sendPasswordResetEmail(auth, input)
+    .then(()=>{ alert(`Password reset link sent to ${input}`); })
+    .catch(()=>{
+        // Try as username from localStorage
+        const saved = localStorage.getItem(input.toLowerCase());
+        if(saved){
+            const info = JSON.parse(saved);
+            sendPasswordResetEmail(auth, info.email).then(()=>{ alert(`Password reset link sent to ${info.email}`); })
+            .catch(error=>{ alert("Error: "+error.message); });
+        }else{
+            alert("User not found!");
+        }
     });
 }
 
@@ -265,12 +270,8 @@ window.changePassword = ()=>{
         return;
     }
     updatePassword(user, newPass)
-    .then(()=>{
-        alert("Password successfully changed!");
-    })
-    .catch((error)=>{
-        alert("Error: " + error.message);
-    });
+    .then(()=>{ alert("Password successfully changed!"); })
+    .catch((error)=>{ alert("Error: "+error.message); });
 }
 
 // AUTO LOGIN
@@ -278,11 +279,12 @@ onAuthStateChanged(auth, (user) => {
   if(user){
     hideAll();
     document.getElementById("dashboard").style.display = "block";
-    let email = user.email || "";
-    let username = Object.keys(usernameMap).find(k=>usernameMap[k].email===email) || email.split("@")[0];
-    let category = usernameMap[username.toLowerCase()]?.category || "";
-    document.getElementById("welcomeUser").innerText = `Welcome ${username} (${category})`;
+    let info = { username:user.email.split("@")[0], category:"" };
+    try{ info = JSON.parse(user.displayName); }catch(e){}
+    document.getElementById("welcomeUser").innerText = `Welcome ${info.username} (${info.category})`;
     document.body.style.background = "#000";
+    // Save mapping for username login
+    localStorage.setItem(info.username.toLowerCase(), JSON.stringify({ email: user.email, category: info.category }));
   }
 });
 </script>
