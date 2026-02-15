@@ -44,6 +44,8 @@ body{
 input, select{ padding:10px; width:85%; margin:8px 0; border-radius:5px; border:1px solid #ccc; }
 
 label{ font-size:14px; color:#333; }
+
+a{ color:#006400; text-decoration:none; cursor:pointer; }
 </style>
 </head>
 <body>
@@ -72,10 +74,11 @@ label{ font-size:14px; color:#333; }
 <div id="loginPage" class="page">
 <div class="header">Student Sign In</div>
 <div class="card">
-  <input type="text" id="loginUsername" placeholder="Username"><br>
+  <input type="text" id="loginInput" placeholder="Username or Email"><br>
   <input type="password" id="loginPass" placeholder="Password"><br>
   <label><input type="checkbox" id="rememberMe"> Remember Me</label><br>
   <button class="option-btn" onclick="login()">Login</button>
+  <p style="margin-top:10px;"><a onclick="forgotPassword()">Forgot Password?</a></p>
   <h4 id="loginResult"></h4>
 </div>
 <button class="option-btn" onclick="goHome()">Back</button>
@@ -85,6 +88,7 @@ label{ font-size:14px; color:#333; }
 <div class="header">Create Account</div>
 <div class="card">
   <input type="text" id="signupUsername" placeholder="Username"><br>
+  <input type="email" id="signupEmail" placeholder="Email"><br>
   <input type="password" id="signupPass" placeholder="Password"><br>
   <select id="signupCategory">
     <option value="">Select Category</option>
@@ -106,6 +110,7 @@ label{ font-size:14px; color:#333; }
 <li>📊 Check Results</li>
 <li>💳 Pay Acceptance Fee</li>
 <li>📝 Update Profile</li>
+<li>🔑 <a onclick="changePassword()">Change Password</a></li>
 </ul>
 </div>
 <button class="option-btn" onclick="goHome()">Logout</button>
@@ -113,8 +118,7 @@ label{ font-size:14px; color:#333; }
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence } 
-from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, sendPasswordResetEmail, updatePassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAe9H4tFxBhu7zhFyNtgpXuKjK4BSgwF5k",
@@ -145,10 +149,11 @@ window.goHome = ()=>{ hideAll(); document.getElementById("home").style.display="
 // SIGNUP
 window.register = ()=>{
     const username = document.getElementById("signupUsername").value.trim();
+    const email = document.getElementById("signupEmail").value.trim();
     const password = document.getElementById("signupPass").value;
     const category = document.getElementById("signupCategory").value;
 
-    if(!username || !password || !category){
+    if(!username || !email || !password || !category){
         document.getElementById("registerResult").style.color="red";
         document.getElementById("registerResult").innerText="Fill all fields!";
         return;
@@ -159,10 +164,9 @@ window.register = ()=>{
         return;
     }
 
-    const dummyEmail = username + "@unisphere.com";
-    usernameMap[username.toLowerCase()] = { email: dummyEmail, category };
+    usernameMap[username.toLowerCase()] = { email, category };
 
-    createUserWithEmailAndPassword(auth, dummyEmail, password)
+    createUserWithEmailAndPassword(auth, email, password)
     .then(()=>{
         document.getElementById("registerResult").style.color="green";
         document.getElementById("registerResult").innerText="Registered! ✅";
@@ -181,17 +185,28 @@ window.register = ()=>{
 
 // LOGIN
 window.login = ()=>{
-    const username = document.getElementById("loginUsername").value.trim();
+    const input = document.getElementById("loginInput").value.trim();
     const password = document.getElementById("loginPass").value;
     const remember = document.getElementById("rememberMe").checked;
 
-    if(!username || !password){
+    if(!input || !password){
         document.getElementById("loginResult").style.color="red";
         document.getElementById("loginResult").innerText="Fill all fields!";
         return;
     }
 
-    const userInfo = usernameMap[username.toLowerCase()] || { email: username + "@unisphere.com", category: "" };
+    // Use email if input is email, otherwise username
+    let userInfo = usernameMap[input.toLowerCase()];
+    if(!userInfo){
+        // Try if input is an email registered
+        userInfo = Object.values(usernameMap).find(u=>u.email.toLowerCase()===input.toLowerCase());
+    }
+    if(!userInfo){
+        document.getElementById("loginResult").style.color="red";
+        document.getElementById("loginResult").innerText="User not found!";
+        return;
+    }
+
     const persistence = remember ? browserLocalPersistence : browserSessionPersistence;
 
     setPersistence(auth, persistence)
@@ -201,6 +216,7 @@ window.login = ()=>{
         document.getElementById("loginResult").innerText="Login Successful! ✅";
         setTimeout(()=>{
             hideAll();
+            let username = Object.keys(usernameMap).find(k=>usernameMap[k].email === userInfo.email);
             document.getElementById("dashboard").style.display="block";
             document.getElementById("welcomeUser").innerText=`Welcome ${username} (${userInfo.category})`;
             document.body.style.background="#000";
@@ -212,13 +228,58 @@ window.login = ()=>{
     });
 }
 
+// FORGOT PASSWORD
+window.forgotPassword = ()=>{
+    const input = document.getElementById("loginInput").value.trim();
+    if(!input){
+        alert("Enter your username or email first!");
+        return;
+    }
+    let userInfo = usernameMap[input.toLowerCase()];
+    if(!userInfo){
+        userInfo = Object.values(usernameMap).find(u=>u.email.toLowerCase()===input.toLowerCase());
+    }
+    if(!userInfo){
+        alert("User not found!");
+        return;
+    }
+    sendPasswordResetEmail(auth, userInfo.email)
+    .then(()=>{
+        alert(`Password reset link sent to ${userInfo.email}`);
+    })
+    .catch((error)=>{
+        alert("Error: " + error.message);
+    });
+}
+
+// CHANGE PASSWORD
+window.changePassword = ()=>{
+    const user = auth.currentUser;
+    if(!user){
+        alert("You need to be logged in to change password!");
+        return;
+    }
+    const newPass = prompt("Enter your new password (min 6 chars):");
+    if(!newPass || newPass.length < 6){
+        alert("Password must be at least 6 characters!");
+        return;
+    }
+    updatePassword(user, newPass)
+    .then(()=>{
+        alert("Password successfully changed!");
+    })
+    .catch((error)=>{
+        alert("Error: " + error.message);
+    });
+}
+
 // AUTO LOGIN
 onAuthStateChanged(auth, (user) => {
   if(user){
     hideAll();
     document.getElementById("dashboard").style.display = "block";
     let email = user.email || "";
-    let username = email.split("@")[0];
+    let username = Object.keys(usernameMap).find(k=>usernameMap[k].email===email) || email.split("@")[0];
     let category = usernameMap[username.toLowerCase()]?.category || "";
     document.getElementById("welcomeUser").innerText = `Welcome ${username} (${category})`;
     document.body.style.background = "#000";
