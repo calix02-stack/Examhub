@@ -233,12 +233,12 @@ font-weight:bold;
         <label>Courses 🏫</label>
         <input type="text" placeholder="Upload courses later (placeholder)" id="courses"><br>
 
-        <label>Grades (Pick 5) 📝</label>
-        <select id="grade1"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
-        <select id="grade2"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
-        <select id="grade3"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
-        <select id="grade4"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
-        <select id="grade5"><option value="">Select Grade</option><option>A1</option><option>B2</option><option>B3</option><option>C4</option><option>C5</option><option>C6</option></select><br>
+        <label>Grades (A1-C6) 📝</label>
+        <select id="grades">
+            <option value="">Select Grade</option>
+            <option>A1</option><option>B2</option><option>B3</option>
+            <option>C4</option><option>C5</option><option>C6</option>
+        </select><br>
 
         <label>JAMB Score 🎯</label>
         <input type="number" id="jambScore" placeholder="Minimum 160" min="160"><br>
@@ -381,46 +381,33 @@ window.forgotPassword = ()=>{
     const input = document.getElementById("loginInput").value.trim();
     if(!input){ alert("Enter username or email!"); return; }
 
-   
     sendPasswordResetEmail(auth, input)
-    .then(() => {
-        alert(`Password reset link sent to ${input}`);
-    })
-    .catch(() => {
+    .then(()=>{ alert(`Password reset link sent to ${input}`); })
+    .catch(()=>{
         const saved = localStorage.getItem(input.toLowerCase());
-        if (saved) {
+        if(saved){
             const info = JSON.parse(saved);
-            sendPasswordResetEmail(auth, info.email)
-            .then(() => { 
-                alert(`Password reset link sent to ${info.email}`); 
-            })
-            .catch(error => { 
-                alert("Error: " + error.message); 
-            });
-        } else {
+            sendPasswordResetEmail(auth, info.email).then(()=>{ alert(`Password reset link sent to ${info.email}`); })
+            .catch(error=>{ alert("Error: "+error.message); });
+        }else{
             alert("User not found!");
         }
     });
 }
 
 // LOGOUT
-window.logout = () => {
-    signOut(auth).then(() => {
-        hideAll();
-        goHome();
-    });
-}
+window.logout = ()=>{ signOut(auth).then(()=>{ hideAll(); goHome(); }); }
 
 // AUTO LOGIN
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth,(user)=>{
     if(user){
-        let info = { username: user.email.split("@")[0], category: "" };
-        try { if(user.displayName) info = JSON.parse(user.displayName); } catch(e) {}
+        let info = { username:user.email.split("@")[0], category:"" };
+        try{ if(user.displayName) info = JSON.parse(user.displayName); } catch(e){ }
         localStorage.setItem(info.username.toLowerCase(), JSON.stringify({ email: user.email, category: info.category }));
         hideAll();
-        if(info.category === "Aspirant"){
+           if(info.category === "Aspirant"){
             document.getElementById("aspirantName").innerText = info.username;
-            document.getElementById("aspirantDashboard").style.display = "block";
+            document.getElementById("aspirantDashboard").style.display="block";
         } else {
             alert("100L dashboard coming soon!");
         }
@@ -428,30 +415,24 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // SCREENING PORTAL NAVIGATION
-window.openScreening = () => {
+window.openScreening = ()=>{
     hideAll();
-    document.getElementById("screeningPortal").style.display = "block";
+    document.getElementById("screeningPortal").style.display="block";
 }
 
-window.closeScreening = () => {
+window.closeScreening = ()=>{
     hideAll();
-    document.getElementById("aspirantDashboard").style.display = "block";
+    document.getElementById("aspirantDashboard").style.display="block";
 }
 
-// CALCULATE SCREENING SCORE
-window.calculateScore = () => {
+// CALCULATE SCORE
+window.calculateScore = ()=>{
     const courses = document.getElementById("courses").value.trim();
-    const grades = [
-        document.getElementById("grade1").value,
-        document.getElementById("grade2").value,
-        document.getElementById("grade3").value,
-        document.getElementById("grade4").value,
-        document.getElementById("grade5").value
-    ];
+    const grade = document.getElementById("grades").value;
     const jamb = parseInt(document.getElementById("jambScore").value);
     const state = document.getElementById("stateOrigin").value;
 
-    if(!courses || grades.includes("") || !jamb || !state){
+    if(!courses || !grade || !jamb || !state){
         document.getElementById("scoreResult").style.color="red";
         document.getElementById("scoreResult").innerText="Fill all fields!";
         return;
@@ -463,25 +444,16 @@ window.calculateScore = () => {
         return;
     }
 
-    // GRADE points (A1=6 ... C6=1)
-    const gradePoints = { A1:6, B2:5, B3:4, C4:3, C5:2, C6:1 };
-    let totalGradePoints = grades.reduce((sum, g) => sum + (gradePoints[g]||0), 0);
-
-    // Scale 5-grade total to 40 points
-    const gradeScore = (totalGradePoints / 30) * 40; // 6*5=30 max
-
-    // JAMB points, scaled to 60
-    let jambScore = ((jamb - 160) / (400 - 160)) * 60;
-    if(jambScore > 60) jambScore = 60;
-
-    // State bonus
-    let stateBonus = (state === "Osun") ? 5 : 0;
-
-    const totalScore = gradeScore + jambScore + stateBonus;
+    // Placeholder scoring logic (update later with your own formula)
+    let score = 0;
+    const gradeScores = {A1:6, B2:5, B3:4, C4:3, C5:2, C6:1};
+    score += gradeScores[grade] || 0;
+    score += (jamb - 160)/10; // scaled contribution from JAMB
+    if(state === "Osun") score += 2; // bonus for state
 
     document.getElementById("scoreResult").style.color="green";
-    document.getElementById("scoreResult").innerText=`Calculated Score: ${totalScore.toFixed(2)} / 105`;
+    document.getElementById("scoreResult").innerText=`Calculated Score: ${score.toFixed(2)}`;
 }
-</="script">
+</script>
 </body>
 </html>
